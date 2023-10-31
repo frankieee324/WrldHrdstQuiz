@@ -1,1 +1,1 @@
-# WrldHrdstQuiz
+# Quizzz

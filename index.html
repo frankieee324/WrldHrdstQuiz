@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <title>Word game</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1>Code Quiz</h1>
+      <div id="timer">
+        <button id="start">start</button>
+      </div>
+      <h1 id="question"></h1>
+    </header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width-device-width, intial-scale=1.0">
-    <script defer src="assets/quiz.js"></script>
-    <link rel="styelsheets" type="text/css" href="assets/style.css" />
+    <!-- Main  -->
+    <section id="main">
+    </section>
 
-    <title>Quiz Page</title>
-</head>
+    <!-- Scores  -->
+    <aside>
+      <h2>High Scores</h2>
+      <ul class="Scorelist">
+      </ul>
+    </aside>
 
-<body>
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link scores" aria-current="page" href="a">view high scores</a>
-        </li>
-    </ul>
-    <div class="quizcontainer">
-        <div class="quizheader">
-            <h1>Coding Quiz Challenge</h1>
-        </div>
-        <div class="quizbody">
-            <p> You are presented with code related questions and must be completed within givin time limit.
-                If answered incorrectly, question will be makred as incorrect and time will be deducted!</p>
-                
-                
-    <a href="quiz.html" id="start-button">Start Quiz</a>
-        </div>
-    </div>
-</body>
-
+    <script src="./assets/questions.js"></script>
+    <script src="./assets/script.js"></script>
+  </body>
 </html>

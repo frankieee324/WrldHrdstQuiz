@@ -1,65 +1,129 @@
-var myQuestions = document.getElementById("#questions")
-var quizResults = document.getElementById("results")
-var submitBttn = document.getElementById("submit")
+var startButton = document.querySelector("#start");
+var timerBox = document.getElementById("timer");
+var question = document.getElementById("question");
+var main = document.getElementById("main");
+var scoreList = document.querySelector(".Scorelist");
+var score = 0;
+var nextQuestionId = 0;
+var time;
+var storedScore = JSON.parse(localStorage.getItem("score"));
+if(!storedScore){
+  var storedScore = [];
+}
 
-function buildquiz() {}
+// Show next question and clickable options 
+function nextQuestion(nextQuestionId) {
 
-function showResults(){}
+  question.innerHTML = questions[nextQuestionId].question;
+  main.innerHTML = "";
+  var choice1 = document.createElement("a");
+  choice1.textContent = questions[nextQuestionId].a;
+  choice1.setAttribute("data-id", "1");
+  if (questions[nextQuestionId].win == "a") {
+    choice1.setAttribute("data-win", "true");
+  }
+  main.appendChild(choice1);
 
-buildquiz();
+  var choice2 = document.createElement("a");
+  choice2.textContent = questions[nextQuestionId].b;
+  choice2.setAttribute("data-id", "2");
+  if (questions[nextQuestionId].win == "b") {
+    choice2.setAttribute("data-win", "true");
+  }
+  main.appendChild(choice2);
 
-submitBttn.addEventListener('click', showResults)
+  var choice3 = document.createElement("a");
+  choice3.textContent = questions[nextQuestionId].c;
+  choice3.setAttribute("data-id", "3");
+  if (questions[nextQuestionId].win == "c") {
+    choice3.setAttribute("data-win", "true");
 
-var quizQuestions = [
-    {
-        question: "Commonly used data types do NOT include",
-        answers: {
-            a: "string",
-            b: "booleans", 
-            c: "alerts",
-            d: "numbers",
-        },
-        correctAnswer: "a"
-    },
-    {
-        question: "The condition in an if/else statements is enclosed with ____.",
-        answers: {
-            a: "quotes",
-            b: "curly brackets",
-            c: "parenthesis",
-            d: "square brackets",
-        },
-        correctAnswer: "c"
-    },
-    {
-        question: "Arrays in Javascript can be used to store ____.",
-        answers:{
-            a: "numbers and strings",
-            b: "other arrays",
-            c: "booleans",
-            d: "all of the above",
-        },
-        correctAnswer: "d"
-    },
-    {
-        question: "String values must ge enclosed within ____ when being assigned to variables",
-        answers:{
-            a: "commas",
-            b: "curly brackets",
-            c: "quotes",
-            d: "parenthesis",
-        },
-        correctAnswer: ""
-    },
-    {
-        question: "A very useful tool used during development and debugging for printing content to the debugger is",
-        answers:{
-            a: "Javascript",
-            b: "terminal/bash",
-            c: "for loops",
-            d: "console log",
-        },
-        correctAnswer: ""
+  }
+  main.appendChild(choice3);
 
-    },
-]
+  var choice4 = document.createElement("a");
+  choice4.textContent = questions[nextQuestionId].d;
+  choice4.setAttribute("data-id", "4");
+  if (questions[nextQuestionId].win == "d") {
+    choice4.setAttribute("data-win", "true");
+  }
+  main.appendChild(choice4);
+  window.nextQuestionId++;
+}
+
+// Timer. Starts at 30secs, remove 5 sec each time a wrong answer is clicked. Shows game over when the timer reaches 0.
+timerBox.addEventListener("click", function (event) {
+
+  if(event.target.id = "startagain"){
+    score = 0;
+    nextQuestionId = 0;
+  }
+
+  time = 31;
+  var timer = setInterval(function () {
+    timerBox.innerHTML = "";
+    time--;
+    timerBox.textContent = time + " seconds left.";
+
+    if (time < 1) {
+      clearInterval(timer);
+      timerBox.innerHTML = "<button id='startagain'>Play again</button>";
+      question.innerHTML = "Game Over";
+      enterscore();
+    }
+  }, 1000);
+
+  nextQuestion(nextQuestionId);
+  
+});
+
+// Sorts the highscore and shows it in li tags
+function highScore(){
+  storedScore.sort();
+  storedScore.reverse();
+  for (var i = 0; i < storedScore.length; i++) {
+    var highScore = storedScore[i];
+    var li = document.createElement("li");
+    li.textContent = highScore;
+    scoreList.appendChild(li);
+  }
+
+}
+
+// Endgame
+function enterscore(){
+  time = 0;
+  main.innerHTML = "";
+  scoreList.innerHTML = "Your Score is : " + score + "<form>Enter your name : <input type='text' id='name' name='name' > <button> Send </button></form>";
+}
+
+// Check the result selected
+main.addEventListener("click", function (event) {
+  win = event.target.getAttribute("data-win");
+  if (win) {
+    score += 10;
+  } else {
+    time -= 5;
+  }
+  if(nextQuestionId < 10){
+    nextQuestion(nextQuestionId);
+  }else{
+    enterscore();
+  }
+
+});
+
+//Enter name in the high score
+scoreList.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+  var name = document.getElementById("name");
+  stores = storedScore.push(score + "pts -- " + name.value);
+  localStorage.setItem("score", JSON.stringify(storedScore));
+  scoreList.innerHTML = "";
+  highScore();
+
+});
+
+
+highScore();
